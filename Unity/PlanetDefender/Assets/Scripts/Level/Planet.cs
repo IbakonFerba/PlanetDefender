@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FK.Utility;
@@ -48,6 +49,8 @@ public class Planet : Singleton<Planet>
     [SerializeField] private Transform _model;
     [SerializeField] private float _radius = 5.0f;
 
+    [SerializeField] private GameObject TestPrefab;
+    [SerializeField] private int TestGridPoints = 1000;
     #endregion
 
 
@@ -88,6 +91,8 @@ public class Planet : Singleton<Planet>
         _collider = GetComponent<SphereCollider>();
         _collider.radius = _radius;
         _model.localScale = new Vector3(_radius, _radius, _radius) * 2f;
+        
+        BuildGrid();
     }
 
     #endregion
@@ -113,6 +118,23 @@ public class Planet : Singleton<Planet>
 
     #region FUNCTIONALITY
 
+    private void BuildGrid()
+    {
+        float phi = Mathf.PI * (3f - Mathf.Sqrt(5f));
+        for (int i = 0; i < TestGridPoints; ++i)
+        {
+            Vector3 pos = Vector3.zero;
+            pos.y = 1f - (i / (TestGridPoints - 1f)) * 2;
+            float rad = Mathf.Sqrt(1 - pos.y * pos.y);
+
+            float theta = phi * i;
+            pos.x = Mathf.Cos(theta)*rad;
+            pos.z = Mathf.Sin(theta) * rad;
+
+            pos *= _radius;
+            GameObject.Instantiate(TestPrefab, pos, Quaternion.identity);
+        }
+    }
     #endregion
 
 
