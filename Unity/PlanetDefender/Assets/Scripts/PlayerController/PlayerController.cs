@@ -121,6 +121,8 @@ public class PlayerController : MonoBehaviour
         Move();
         SnapToSurface();
         LookForward();
+        
+        Planet.Instance.ClosestGridCell(transform.position);
     }
 
     public void OnMove(InputValue value)
